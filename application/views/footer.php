@@ -9,4 +9,6 @@
 		<small> Copyright&copy; 2022 JGMA-Team Corporation. Todos os direitos reservados.</small>
 	</footer>
 
+	<script src="<?php echo base_url('assets/js/functions.js')?>"></script>
+
 </html>

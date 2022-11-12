@@ -35,18 +35,59 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				</div>
 			</div>
 		</main>
+
+		<div class="toast-container text-white position-fixed top-0 end-0 p-3">
+			<div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+				<div class="d-flex">
+					<div class="toast-body" id="message">
+						
+					</div>
+					<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+				</div>
+			</div>
+		</div>
+
 	</body>
 
 	<?php $this->load->view('footer') ?>
 
 	<script>
+
 		var cargo = JSON.parse('<?= json_encode($this->session->userdata('cargo')); ?>');
-
-		console.log(cargo);
-
 		if (cargo > 2) {
 			document.getElementById('oculta-btn').style.display = 'none';
 		}
+
+	</script>
+
+	<script>
+
+		function ativaToast(msg, tempo, tipoToast) {
+			document.getElementById('message').innerHTML = msg;
+			const toastLiveExample = document.getElementById('liveToast');
+			$('#liveToast').toggleClass(tipoToast);
+			const toast = new bootstrap.Toast(toastLiveExample, {
+				animation: true,
+				autohide: true,
+				delay: tempo,
+			});
+			toast.show();
+		}
+
+		var inserir = JSON.parse('<?= json_encode($this->session->userdata('inserir')); ?>');
+		switch (inserir) {
+			case 'erro':
+				ativaToast('Não foi possível adicionar o produto!', 4000, 'bg-danger');	
+				break;
+
+			case 'ok':
+				ativaToast('Produto adicionado com sucesso!', 4000, 'bg-success');	
+				break;
+		
+			default:
+				break;
+		}		
+
 	</script>
 
 </html>
