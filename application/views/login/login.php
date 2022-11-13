@@ -34,7 +34,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 						<div class="form form-group">
 							<label for="funcional" class="form-label">Funcional</label>
-							<input class="form-control" type="text" name="funcional" id="funcional" required>
+							<input class="form-control" type="tel" name="funcional" id="funcional" required>
 						</div>
 
 						<div class="form form-group">

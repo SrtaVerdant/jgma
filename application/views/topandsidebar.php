@@ -25,7 +25,7 @@
 					</ul>
 					<div class="info-user">
 						<span class="mostra-info">Funcionario: <span class="info-normal"><?php print_r($nome); ?></span></br>Funcional: <span class="info-normal"><?php print_r($this->session->userdata('funcional')); ?></span></span>
-						<a href="<?= 'logout'; ?>" style="margin-left: 3rem;" class="btn btn-secondary">Sair</a>
+						<a href="<?= base_url('logout'); ?>" style="margin-left: 3rem;" class="btn btn-secondary">Sair</a>
 					</div>
 				</div>
 				<?php } ?>

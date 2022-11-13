@@ -19,19 +19,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				<div class="dashboard">
 					<div class="row alinha-buttons">
 						<div class="col-md-3">
-							<a href="<?= base_url('dashboard/inserir') ?>"><button class="btn btn-primary">Inserir produto</button></a>
+							<a href="<?= base_url('dashboard/inserir') ?>"><button class="btn btn-primary">Inserir Produto</button></a>
 						</div>
-					</div>
+						<div class="col-md-3">
+							<a href="<?= base_url('dashboard/fornecedor/inserir') ?>"><button class="btn btn-primary">Inserir Fornecedor</button></a>
+						</div>
+					</div>					
 					<div class="row alinha-buttons">
 						<div class="col-md-3">
-						<a href="<?= base_url('dashboard/consultar') ?>"><button class="btn btn-primary">Consultar Produtos</button></a>
-						</div>								
-					</div>
-					<div class="row alinha-buttons" id="oculta-btn">							
+							<a href="<?= base_url('dashboard/consultar/produtos') ?>"><button class="btn btn-primary">Consultar Produtos</button></a>
+						</div>	
 						<div class="col-md-3">
-						<a href="<?= base_url('dashboard/relatorio') ?>"><button class="btn btn-primary">Relatório de Produtos</button></a>
-						</div>
-					</div>			
+							<a href="<?= base_url('dashboard/relatorio') ?>"><button class="btn btn-primary">Relatório de Produtos</button></a>
+						</div>							
+					</div>							
 				</div>
 			</div>
 		</main>
@@ -52,7 +53,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<?php $this->load->view('footer') ?>
 
 	<script>
-
+		//Fazer validação de cargo
 		var cargo = JSON.parse('<?= json_encode($this->session->userdata('cargo')); ?>');
 		if (cargo > 2) {
 			document.getElementById('oculta-btn').style.display = 'none';
@@ -86,8 +87,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		
 			default:
 				break;
-		}		
+		}	
 
 	</script>
+
+	<?php $this->session->set_userdata('inserir', ''); ?>
 
 </html>
