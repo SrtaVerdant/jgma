@@ -8,10 +8,8 @@ $route['translate_uri_dashes'] = FALSE;
 
 //Logout
 $route['logout'] = 'funcionarios/logout';
-
 //Recuperar Senha
 $route['recuperar-senha'] = 'funcionarios/recuperarSenha';
-
 // Dashboad de ações
 $route['dashboard'] = 'dashboard/home';
 // Inserir produto
