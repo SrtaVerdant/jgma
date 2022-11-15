@@ -41,9 +41,26 @@ window.onload = function () {
 
 		})
 	});
+
+	var classesData = document.getElementsByClassName("datavalidadepadaria");
+	var datas = Array.from(classesData);
+	const validadePadaria = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), dataAtual.getDate());
+	validadePadaria.setDate(validadePadaria.getDate() + 30);
+
+	datas.forEach(function (data) {		
+		new Cleave(data, {
+			date: true,
+			delimiter: '/',
+			dateMin: dataAtual.getFullYear() + '-' + (dataAtual.getMonth() + 1) + '-' + dataAtual.getDate(),
+			dateMax: FormataStringDataPadaria(validadePadaria.toLocaleDateString()),
+			datePattern: ['d', 'm', 'Y']
+
+		})
+	});
+
 };
 
-// Tratativa para data de validade do produto
+// Tratativa para data de validade do produto +5 anos
 function FormataStringData(data) {
 	var dia = data.split("/")[0];
 	var mes = data.split("/")[1];
@@ -51,6 +68,16 @@ function FormataStringData(data) {
 
 	return (ano + 5) + '-' + ("0" + mes).slice(-2) + '-' + ("0" + dia).slice(-2);
 }
+
+// Tratativa para data de validade do produto de padaria
+function FormataStringDataPadaria(data) {
+	var dia = data.split("/")[0];
+	var mes = data.split("/")[1];
+	var ano = Number(data.split("/")[2]);
+
+	return ano + '-' + ("0" + mes).slice(-2) + '-' + ("0" + dia).slice(-2);
+}
+
 
 // Formata moeda para preço unitário
 function formatarMoeda(i) {

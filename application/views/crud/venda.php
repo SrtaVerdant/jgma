@@ -29,8 +29,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <p class="card-text">Quantidade do lote: <?= $produto->quantidade; ?></p>
                                     <p class="card-text">Quantidade que será vendida</p>
                                     <input type="tel" id="qtdvendas" name="qtdvendas" required class="form-control" onkeyup="verificaQtd(this.value)" maxlength="10" onkeypress="return somenteNumeros(event)">
-                                    <div id="alerta" class="alert alert-danger  align-items-center mt-3" style="display:none;">
-                                        
+                                    <div id="alerta" class="alert alert-danger  align-items-center mt-3" style="display:none;">                                        
                                         <div>
                                             A quantidade informada ultrapassou o lote!
                                         </div>

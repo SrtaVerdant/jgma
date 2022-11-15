@@ -75,7 +75,7 @@ class Dashboard extends CI_Controller
 
 			$this->session->set_userdata('id_prod', '');
 			$this->session->set_userdata('id_fornecedor', '');
-			
+
 			$this->load->view('crud/consultar', $dados);
 		} else {
 			redirect('');
@@ -89,15 +89,22 @@ class Dashboard extends CI_Controller
 
 	public function LoadEditar($id)
 	{
-		if ($this->session->userdata('login') == 'ok') {
-
-			$dados['titulo'] = 'Editar produto';
-			$dados['fornecedores'] = $this->dashboard_model->getAllFornecedores();
+		if ($this->session->userdata('login') == 'ok') {		
+			
 			$dados['produto'] = $this->dashboard_model->getProdutoById($id);
-			$dados['tiposProdutos'] = $this->dashboard_model->getAllTipoProdutos();
-
 			$this->session->set_userdata('id_prod', $id);
-			$this->load->view('crud/editar', $dados);
+
+			if ($dados['produto']->fk_prod_tipo == 15) {
+				$dados['titulo'] = 'Editar item padaria';
+				
+				$this->load->view('crud-padaria/editar', $dados);
+			}else{
+				$dados['titulo'] = 'Editar produto';
+				$dados['fornecedores'] = $this->dashboard_model->getAllFornecedores();
+				$dados['tiposProdutos'] = $this->dashboard_model->getAllTipoProdutos();
+				$this->load->view('crud/editar', $dados);
+			}
+			
 		} else {
 			redirect('');
 		}
@@ -198,10 +205,101 @@ class Dashboard extends CI_Controller
 			$dados['titulo'] = 'Venda produto';
 			$dados['produto'] = $this->dashboard_model->getProdutoById($id_produto);
 
+			$this->session->set_userdata('id_prod', $id_produto);
 			$this->load->view('crud/venda', $dados);
 		} else {
 			redirect('');
 		}
+	}
+
+	public function inserirVenda()
+	{
+		$produto = $this->dashboard_model->getProdutoById($this->session->userdata('id_prod'));
+		$qtdvendas = (int)$this->input->post('qtdvendas');
+		$qtdproduto = (int)$produto->quantidade;
+
+		
+		$venda = array(
+						'nome' => $produto->nome,
+						'qtd' => $qtdvendas,
+						'valor' => $produto->valor_unitario,
+						'funcional' => $this->session->userdata('funcional')
+		
+		);
+
+		$this->dashboard_model->registraVenda($venda);
+		$venda = $qtdproduto - $qtdvendas;
+		if ($venda == 0) {
+			$this->dashboard_model->excluiProduto($this->session->userdata('id_prod'));
+		}else{
+			$this->dashboard_model->atualizaQtdProduto($this->session->userdata('id_prod'), $venda);
+		}
+
+		$this->session->set_userdata('venda', 'ok');
+
+		redirect('dashboard');
+
+	}
+
+	public function LoadInserirPadaria()
+	{
+		if ($this->session->userdata('login') == 'ok') {
+
+			$dados['titulo'] = 'Inserir item de padaria';
+
+			$this->load->view('crud-padaria/inserir', $dados);
+		} else {
+			redirect('');
+		}
+	}
+
+	public function inserirProdutoPadaria()
+	{
+		$this->session->set_userdata('inserir', '');
+
+		$padaria = array(
+				'funcional' =>(int)$this->session->userdata('funcional'),
+				'nome' => $this->input->post('produto'),
+				'qtd' => (int)$this->input->post('quantidade'),
+				'fk_fornecedor' => 48,
+				'fk_tipo' => 15,
+				'data_validade' => $this->input->post('validade'),
+				'preco_unitario' => formataMoedaDecimal($this->input->post('preco'))
+		);
+
+		if ($padaria['preco_unitario'] == 0.00 || empty(trim($padaria['qtd']))) {
+			$this->session->set_userdata('inserir', 'erro');
+		} else {
+			$this->dashboard_model->cadastraItemPadaria($padaria);
+			$this->session->set_userdata('inserir', 'ok');
+		}
+
+		redirect('dashboard');
+	}
+
+	public function editarProdutoPadaria()
+	{
+		$this->session->set_userdata('editar', '');
+
+		$padaria = array(
+			'funcional' =>(int)$this->session->userdata('funcional'),
+			'id_produto' =>(int)$this->session->userdata('id_prod'),
+			'nome' => $this->input->post('produto'),
+			'qtd' => (int)$this->input->post('quantidade'),
+			'fk_fornecedor' => 48,
+			'fk_tipo' => 15,
+			'data_validade' => $this->input->post('validade'),
+			'preco_unitario' => formataMoedaDecimal($this->input->post('preco'))
+		);
+
+		if ($padaria['preco_unitario'] == 0.00 || empty(trim($padaria['qtd']))) {
+			$this->session->set_userdata('editar', 'erro');
+		} else {
+			$this->dashboard_model->editaItemPadaria($padaria);
+			$this->session->set_userdata('editar', 'ok');
+		}
+
+		redirect('dashboard/consultar/produtos');
 	}
 
 	public function LoadInserirFornecedor()
@@ -309,7 +407,7 @@ class Dashboard extends CI_Controller
 		$this->session->set_userdata('editar_fornecedor', '');
 
 		$fornecedor = array(
-			'id_fornecedor' =>(int) $this->session->userdata('id_fornecedor'),
+			'id_fornecedor' => (int) $this->session->userdata('id_fornecedor'),
 			'nome' => strtoupper(retiraCaracteresEspeciais($this->input->post('fornecedor'))),
 			'cnpj' => $this->input->post('cnpj')
 		);
@@ -319,14 +417,7 @@ class Dashboard extends CI_Controller
 		} else {
 			$this->dashboard_model->editarFornecedor($fornecedor);
 			$this->session->set_userdata('editar_fornecedor', 'ok');
-			
 		}
 		redirect('dashboard/fornecedor/consultar');
 	}
-
-	public function inserirVenda()
-	{
-		echo 'aqui';
-	}
-	
 }

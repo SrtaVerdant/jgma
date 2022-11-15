@@ -36,7 +36,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				</div>
 				<div class="row alinha-buttons">	
 					<div class="col-md-3">
-						<a href="<?= base_url('dashboard/relatorio') ?>"><button class="btn btn-primary">Inserir Item de Padaria</button></a>
+						<a href="<?= base_url('dashboard/padaria/inserir') ?>"><button class="btn btn-primary">Inserir Item de Padaria</button></a>
 					</div>				
 					<div class="col-md-3">
 						<a href="<?= base_url('dashboard/relatorio') ?>"><button class="btn btn-primary">Relatório de Produtos</button></a>
@@ -110,9 +110,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		default:
 			break;
 	}
+
+	var venda = JSON.parse('<?= json_encode($this->session->userdata('venda')); ?>');
+	if (venda == 'ok') {
+		ativaToast('Venda registrada com sucesso!', 4000, 'bg-success');
+	}
+	
 </script>
 
 <?php $this->session->set_userdata('inserir', ''); ?>
 <?php $this->session->set_userdata('inserir_fornecedor', ''); ?>
+<?php $this->session->set_userdata('venda', ''); ?>
 
 </html>

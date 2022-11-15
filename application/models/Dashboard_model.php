@@ -78,9 +78,8 @@ class Dashboard_model extends CI_Model
     if ($query) {
 
       return false;
-
     } else {
-      
+
       $this->db->set('nome_forne', $fornecedor['nome']);
       $this->db->set('cnpj', $fornecedor['cnpj']);
       $this->db->insert('fornecedores');
@@ -109,9 +108,52 @@ class Dashboard_model extends CI_Model
 
   public function editarFornecedor($fornecedor)
   {
-      $this->db->set('nome_forne', $fornecedor['nome']);
-      $this->db->set('cnpj', $fornecedor['cnpj']);
-      $this->db->where('id_forne_pk', $fornecedor['id_fornecedor']);
-      $this->db->update('fornecedores');
+    $this->db->set('nome_forne', $fornecedor['nome']);
+    $this->db->set('cnpj', $fornecedor['cnpj']);
+    $this->db->where('id_forne_pk', $fornecedor['id_fornecedor']);
+    $this->db->update('fornecedores');
+  }
+
+  public function registraVenda($venda)
+  {
+    $this->db->set('desc_prod', $venda['nome']);
+    $this->db->set('fk_funcional', $venda['funcional']);
+    $this->db->set('valor_unitario', $venda['valor']);
+    $this->db->set('quantidade', $venda['qtd']);
+    $this->db->insert('vendas');
+  }
+
+  public function atualizaQtdProduto($id_produto, $qtdvenda)
+  {
+    $this->db->set('quantidade', $qtdvenda);
+    $this->db->where('id_prod_pk', $id_produto);
+    $this->db->update('produtos');
+  }
+
+  public function cadastraItemPadaria($padaria)
+  {
+    $this->db->set('nome', $padaria['nome']);
+    $this->db->set('fk_forne', $padaria['fk_fornecedor']);
+    $this->db->set('fk_funcional', $padaria['funcional']);
+    $this->db->set('valor_unitario', $padaria['preco_unitario']);
+    $this->db->set('fk_prod_tipo', $padaria['fk_tipo']);
+    $this->db->set('quantidade', $padaria['qtd']);
+    $this->db->set('prazo_validade', $padaria['data_validade']);
+    $this->db->set('data_compra', '-');
+    $this->db->insert('produtos');
+  }
+
+  public function editaItemPadaria($padaria)
+  {
+    $this->db->set('nome', $padaria['nome']);
+    $this->db->set('fk_forne', $padaria['fk_fornecedor']);
+    $this->db->set('fk_funcional', $padaria['funcional']);
+    $this->db->set('valor_unitario', $padaria['preco_unitario']);
+    $this->db->set('fk_prod_tipo', $padaria['fk_tipo']);
+    $this->db->set('quantidade', $padaria['qtd']);
+    $this->db->set('prazo_validade', $padaria['data_validade']);
+    $this->db->set('data_compra', '-');
+    $this->db->where('id_prod_pk', $padaria['id_produto']);
+    $this->db->update('produtos');
   }
 }

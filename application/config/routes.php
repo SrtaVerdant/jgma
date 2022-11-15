@@ -23,7 +23,7 @@ $route['dashboard/relatorio'] = 'dashboard/LoadRelatorio';
 $route['dashboard/editar/(:num)'] = 'dashboard/LoadEditar/$1';
 // Excluir produto
 $route['dashboard/excluir/(:num)'] = 'dashboard/excluirProduto/$1';
-// Excluir produto
+// Venda produto
 $route['dashboard/venda/(:num)'] = 'dashboard/LoadVendaProduto/$1';
 
 // Inserir fornecedor
@@ -31,5 +31,8 @@ $route['dashboard/fornecedor/inserir'] = 'dashboard/LoadInserirFornecedor';
 // Consultar fornecedor
 $route['dashboard/fornecedor/consultar'] = 'dashboard/LoadConsultarFornecedor';
 $route['dashboard/processing/fornecedores'] = 'dashboard/dataTableFornecedores';
-// Editar produto
+// Editar fornecedor
 $route['dashboard/fornecedor/editar/(:num)'] = 'dashboard/LoadEditarFornecedor/$1';
+
+// Inserir item de cozinha(padaria)
+$route['dashboard/padaria/inserir'] = 'dashboard/LoadInserirPadaria';

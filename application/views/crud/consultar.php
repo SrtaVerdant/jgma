@@ -42,7 +42,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </div>
             <div class="row">
                 <div class="container botoesbottom conteudo">
-                    <a style="background: #4f295c !important" href="<?= base_url('dashboard/inserir'); ?>" class="text-voltar btn btn-secondary btn-voltar width-btn">+ Produto</a>
+                    <a></a>
                     <a href="<?= base_url('dashboard'); ?>" class="text-voltar btn btn-secondary btn-voltar width-btn">Voltar</a>
                 </div>
             </div>
