@@ -43,7 +43,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="row">
                 <div class="container botoesbottom conteudo">
                     <a></a>
-                    <a href="<?= base_url('dashboard'); ?>" class="text-voltar btn btn-secondary btn-voltar width-btn">Voltar</a>
+                    <a href="<?= base_url('dashboard'); ?>" class="text-voltar btn btn-secondary btn-voltar width-btn">Voltar ao menu</a>
                 </div>
             </div>
 

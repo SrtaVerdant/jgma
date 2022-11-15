@@ -71,7 +71,7 @@ class Dashboard extends CI_Controller
 		if ($this->session->userdata('login') == 'ok') {
 
 			$dados['titulo'] = 'Consultar produtos';
-			$dados['produtos'] = $this->dashboard_model->getAllProdutos();
+			$dados['produtos'] = $this->dashboard_model->getAllProdutosExcetoPadaria();
 
 			$this->session->set_userdata('id_prod', '');
 			$this->session->set_userdata('id_fornecedor', '');
@@ -84,27 +84,78 @@ class Dashboard extends CI_Controller
 
 	public function LoadRelatorio()
 	{
-		echo "em construção 3";
+		if ($this->session->userdata('login') == 'ok') {
+
+			$dados['titulo'] = 'Relatório';
+			$dados['produtos'] = $this->dashboard_model->getAllProdutosExcetoPadaria();
+			$dados['padaria'] = $this->dashboard_model->getAllProdutosPadaria();
+			$dados['vendas'] = $this->dashboard_model->getAllVendas();
+
+			$mes = date("m");
+			$ano = date("Y");
+			$dia = date("d");
+
+			$dados['vendamensal'] = [];
+			$dados['vendadiaria'] = [];
+			$dados['vendaanual'] = [];
+			if ($dados['vendas']) {
+				foreach ($dados['vendas'] as $venda) {
+					$mensal = explode(' ', $venda->date_inserted);
+					$mensal = explode('-', $venda->date_inserted);
+
+					if ($mensal[1] == $mes && $mensal[0] == $ano) {
+						array_push($dados['vendamensal'], $venda);
+					}
+
+					$diario = explode(' ', $mensal[2]);
+					if ($mensal[1] == $mes && $mensal[0] == $ano && $mensal[0] == $ano && $diario[0] == $dia) {
+						array_push($dados['vendadiaria'], $venda);
+					}
+
+					if ($mensal[0] == $ano) {
+						array_push($dados['vendaanual'], $venda);
+					}
+				}
+			}
+
+			$dados['qtdproduto'] = [];
+			if ($dados['produtos']) {
+				foreach ($dados['produtos'] as $produto) {
+					$mensal = explode('/', $produto->prazo_validade);
+					if ($mensal[1] == $mes && $mensal[2] == $ano) {
+						array_push($dados['qtdproduto'], $produto);
+					}
+				}
+			}
+
+
+
+			$this->session->set_userdata('id_prod', '');
+			$this->session->set_userdata('id_fornecedor', '');
+
+			$this->load->view('relatorio/relatorio', $dados);
+		} else {
+			redirect('');
+		}
 	}
 
 	public function LoadEditar($id)
 	{
-		if ($this->session->userdata('login') == 'ok') {		
-			
+		if ($this->session->userdata('login') == 'ok') {
+
 			$dados['produto'] = $this->dashboard_model->getProdutoById($id);
 			$this->session->set_userdata('id_prod', $id);
 
 			if ($dados['produto']->fk_prod_tipo == 15) {
 				$dados['titulo'] = 'Editar item padaria';
-				
+
 				$this->load->view('crud-padaria/editar', $dados);
-			}else{
+			} else {
 				$dados['titulo'] = 'Editar produto';
 				$dados['fornecedores'] = $this->dashboard_model->getAllFornecedores();
 				$dados['tiposProdutos'] = $this->dashboard_model->getAllTipoProdutos();
 				$this->load->view('crud/editar', $dados);
 			}
-			
 		} else {
 			redirect('');
 		}
@@ -218,27 +269,30 @@ class Dashboard extends CI_Controller
 		$qtdvendas = (int)$this->input->post('qtdvendas');
 		$qtdproduto = (int)$produto->quantidade;
 
-		
 		$venda = array(
-						'nome' => $produto->nome,
-						'qtd' => $qtdvendas,
-						'valor' => $produto->valor_unitario,
-						'funcional' => $this->session->userdata('funcional')
-		
+			'nome' => $produto->nome,
+			'qtd' => $qtdvendas,
+			'valor' => $produto->valor_unitario,
+			'funcional' => $this->session->userdata('funcional')
+
 		);
 
 		$this->dashboard_model->registraVenda($venda);
 		$venda = $qtdproduto - $qtdvendas;
 		if ($venda == 0) {
 			$this->dashboard_model->excluiProduto($this->session->userdata('id_prod'));
-		}else{
+		} else {
 			$this->dashboard_model->atualizaQtdProduto($this->session->userdata('id_prod'), $venda);
 		}
 
 		$this->session->set_userdata('venda', 'ok');
 
 		redirect('dashboard');
+	}
 
+	public function LoadConsultarVendas()
+	{
+		echo 'em construção';
 	}
 
 	public function LoadInserirPadaria()
@@ -258,13 +312,13 @@ class Dashboard extends CI_Controller
 		$this->session->set_userdata('inserir', '');
 
 		$padaria = array(
-				'funcional' =>(int)$this->session->userdata('funcional'),
-				'nome' => $this->input->post('produto'),
-				'qtd' => (int)$this->input->post('quantidade'),
-				'fk_fornecedor' => 48,
-				'fk_tipo' => 15,
-				'data_validade' => $this->input->post('validade'),
-				'preco_unitario' => formataMoedaDecimal($this->input->post('preco'))
+			'funcional' => (int)$this->session->userdata('funcional'),
+			'nome' => $this->input->post('produto'),
+			'qtd' => (int)$this->input->post('quantidade'),
+			'fk_fornecedor' => 48,
+			'fk_tipo' => 15,
+			'data_validade' => $this->input->post('validade'),
+			'preco_unitario' => formataMoedaDecimal($this->input->post('preco'))
 		);
 
 		if ($padaria['preco_unitario'] == 0.00 || empty(trim($padaria['qtd']))) {
@@ -282,8 +336,8 @@ class Dashboard extends CI_Controller
 		$this->session->set_userdata('editar', '');
 
 		$padaria = array(
-			'funcional' =>(int)$this->session->userdata('funcional'),
-			'id_produto' =>(int)$this->session->userdata('id_prod'),
+			'funcional' => (int)$this->session->userdata('funcional'),
+			'id_produto' => (int)$this->session->userdata('id_prod'),
 			'nome' => $this->input->post('produto'),
 			'qtd' => (int)$this->input->post('quantidade'),
 			'fk_fornecedor' => 48,

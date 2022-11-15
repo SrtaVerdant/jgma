@@ -39,7 +39,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						<a href="<?= base_url('dashboard/padaria/inserir') ?>"><button class="btn btn-primary">Inserir Item de Padaria</button></a>
 					</div>				
 					<div class="col-md-3">
-						<a href="<?= base_url('dashboard/relatorio') ?>"><button class="btn btn-primary">Relatório de Produtos</button></a>
+						<a href="<?= base_url('dashboard/relatorio') ?>"><button class="btn btn-primary">Relatório</button></a>
 					</div>
 				</div>
 			</div>

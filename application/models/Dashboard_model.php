@@ -156,4 +156,29 @@ class Dashboard_model extends CI_Model
     $this->db->where('id_prod_pk', $padaria['id_produto']);
     $this->db->update('produtos');
   }
+
+  public function getAllVendas()
+  {
+    $this->db->select('*');
+    $query = $this->db->get('vendas')->result();
+
+    return $query;
+  }
+
+  public function getAllProdutosExcetoPadaria()
+  {
+    $this->db->select('*');
+    $this->db->where('fk_prod_tipo !=', 15);
+    $query = $this->db->get('produtos')->result();
+
+    return $query;
+  }
+  public function getAllProdutosPadaria()
+  {
+    $this->db->select('*');
+    $this->db->where('fk_prod_tipo', 15);
+    $query = $this->db->get('produtos')->result();
+
+    return $query;
+  }
 }

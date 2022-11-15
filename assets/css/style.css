@@ -251,6 +251,10 @@ footer {
 	display: flex;
     justify-content: center;
 }
+.centro-relatorio{
+	display: flex;
+    justify-content: center;
+}
 
 
 /*Mobile*/

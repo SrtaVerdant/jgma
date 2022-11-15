@@ -25,6 +25,8 @@ $route['dashboard/editar/(:num)'] = 'dashboard/LoadEditar/$1';
 $route['dashboard/excluir/(:num)'] = 'dashboard/excluirProduto/$1';
 // Venda produto
 $route['dashboard/venda/(:num)'] = 'dashboard/LoadVendaProduto/$1';
+// Consultar vendas
+$route['dashboard/consultar/vendas'] = 'dashboard/LoadConsultarVendas';
 
 // Inserir fornecedor
 $route['dashboard/fornecedor/inserir'] = 'dashboard/LoadInserirFornecedor';
