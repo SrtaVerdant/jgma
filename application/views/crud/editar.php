@@ -51,8 +51,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="row espacoentre-inputs">
                 <div class="col-md-6">
                     <label for="tipo" class="font-weight-normal">Tipo:</label>
-                    <input type="text" name="tipo" required class="form-control" value="<? //Colocar o tipo aqui
-                                                                                        ?>">
+                    <select class="form-control js-example-placeholder-single js-states select2" name="tipo">
+                        <option disabled value="-" selected>-</option>
+                        <?php foreach ($tiposProdutos as $tipo) { ?>
+                            <option value="<?php print_r($tipo->id_prod_tipo_pk); ?>" <?php if ($tipo->id_prod_tipo_pk == $produto->fk_prod_tipo) {
+                                                                                            echo "selected='selected'";
+                                                                                        } ?>><?= $tipo->desc_tipo; ?></option>
+                        <?php } ?>
+                    </select>
                 </div>
                 <div class="col-md-6">
                     <label for="datacompra" class="font-weight-normal">Data de compra:</label>

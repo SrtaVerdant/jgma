@@ -19,17 +19,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="row" style="margin-top: 15px;">
                 <div class="col-md-12">
                     <div class="table-responsive" style="padding-top: 15px; padding-bottom: 15px;">
-                        <table id="example" class="table display tableprodutos" style="width:100%">
+                        <table id="fornecedores" class="table display tablefornecedores" style="width:100%">
                             <thead style="margin-top: 15px;">
-                                <tr>
-                                    <th scope="col">ID</th>
+                                <tr>                            
                                     <th scope="col">Nome</th>
-                                    <th scope="col">Fornecedor</th>
-                                    <th scope="col">Valor unitário</th>
-                                    <th scope="col">Tipo</th>
-                                    <th scope="col">Qtd</th>
-                                    <th scope="col">Prazo de validade</th>
-                                    <th scope="col">Data de compra</th>
+                                    <th scope="col">Fornecedor</th>                                   
                                     <th scope="col" class="padding-actions">Ações</th>
                                 </tr>
                             </thead>
@@ -42,7 +36,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </div>
             <div class="row">
                 <div class="container botoesbottom conteudo">
-                    <a style="background: #4f295c !important" href="<?= base_url('dashboard/inserir'); ?>" class="text-voltar btn btn-secondary btn-voltar width-btn">+ Produto</a>
+                    <a style="background: #4f295c !important" href="<?= base_url('dashboard/fornecedor/inserir'); ?>" class="text-voltar btn btn-secondary btn-voltar width-btn">+ Fornecedor</a>
                     <a href="<?= base_url('dashboard'); ?>" class="text-voltar btn btn-secondary btn-voltar width-btn">Voltar</a>
                 </div>
             </div>
@@ -66,7 +60,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <?php $this->load->view('footer') ?>
 
 <script>
-    var table = $('#example').DataTable({
+    var table = $('#fornecedores').DataTable({
         "paging": true,
         "info": true,
         "processing": true,
@@ -74,7 +68,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Portuguese-Brasil.json"
         },
-        "ajax": "<?= base_url() . 'dashboard/produtos'; ?>"
+        "ajax": "<?= base_url() . 'dashboard/processing/fornecedores'; ?>"
 
     });
 </script>
@@ -92,27 +86,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
         toast.show();
     }
 
-    var editar = JSON.parse('<?= json_encode($this->session->userdata('editar')); ?>');
+    var editar = JSON.parse('<?= json_encode($this->session->userdata('editar_fornecedor')); ?>');
     switch (editar) {
         case 'erro':
-            ativaToast('Não foi possível editar o produto!', 4000, 'bg-danger');
+            ativaToast('Não foi possível editar o fornecedor!', 4000, 'bg-danger');
             break;
 
         case 'ok':
-            ativaToast('Produto editado com sucesso!', 4000, 'bg-success');
+            ativaToast('Fornecedor editado com sucesso!', 4000, 'bg-success');
             break;
 
         default:
             break;
     }
 
-    var excluir = JSON.parse('<?= json_encode($this->session->userdata('excluir')); ?>');
-    if (excluir == 'ok') {
-        ativaToast('Produto excluído com sucesso!', 4000, 'bg-success');
-    }
 </script>
 
-<?php $this->session->set_userdata('editar', ''); ?>
-<?php $this->session->set_userdata('excluir', ''); ?>
+<?php $this->session->set_userdata('editar_fornecedor', ''); ?>
 
 </html>

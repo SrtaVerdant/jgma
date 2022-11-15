@@ -31,6 +31,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						<a href="<?= base_url('dashboard/consultar/produtos') ?>"><button class="btn btn-primary">Consultar Produtos</button></a>
 					</div>
 					<div class="col-md-3">
+						<a href="<?= base_url('dashboard/fornecedor/consultar') ?>"><button class="btn btn-primary">Consultar Fornecedores</button></a>
+					</div>
+				</div>
+				<div class="row alinha-buttons">	
+					<div class="col-md-3">
+						<a href="<?= base_url('dashboard/relatorio') ?>"><button class="btn btn-primary">Inserir Item de Padaria</button></a>
+					</div>				
+					<div class="col-md-3">
 						<a href="<?= base_url('dashboard/relatorio') ?>"><button class="btn btn-primary">Relatório de Produtos</button></a>
 					</div>
 				</div>
@@ -62,6 +70,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 </script>
 
 <script>
+
 	function ativaToast(msg, tempo, tipoToast) {
 		document.getElementById('message').innerHTML = msg;
 		const toastLiveExample = document.getElementById('liveToast');
@@ -87,8 +96,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		default:
 			break;
 	}
+
+	var inserir_fornecedor = JSON.parse('<?= json_encode($this->session->userdata('inserir_fornecedor')); ?>');
+	switch (inserir_fornecedor) {
+		case 'erro':
+			ativaToast('Não foi possível adicionar o fornecedor!', 4000, 'bg-danger');
+			break;
+
+		case 'ok':
+			ativaToast('Fornecedor adicionado com sucesso!', 4000, 'bg-success');
+			break;
+
+		default:
+			break;
+	}
 </script>
 
 <?php $this->session->set_userdata('inserir', ''); ?>
+<?php $this->session->set_userdata('inserir_fornecedor', ''); ?>
 
 </html>
