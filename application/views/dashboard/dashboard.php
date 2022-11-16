@@ -62,14 +62,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <?php $this->load->view('footer') ?>
 
 <script>
-	//Fazer validação de cargo
-	var cargo = JSON.parse('<?= json_encode($this->session->userdata('cargo')); ?>');
-	if (cargo > 2) {
-		document.getElementById('oculta-btn').style.display = 'none';
-	}
-</script>
-
-<script>
 
 	function ativaToast(msg, tempo, tipoToast) {
 		document.getElementById('message').innerHTML = msg;
@@ -118,8 +110,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	
 </script>
 
+<script>
+	var permissao = JSON.parse('<?= json_encode($this->session->userdata('permissao')); ?>');
+	var msg =  JSON.parse('<?= json_encode($this->session->userdata('msg')); ?>');
+	if (permissao == 'erro') {
+		ativaToast(msg, 5000, 'bg-danger');
+	}
+
+</script>
+
 <?php $this->session->set_userdata('inserir', ''); ?>
 <?php $this->session->set_userdata('inserir_fornecedor', ''); ?>
 <?php $this->session->set_userdata('venda', ''); ?>
+<?php $this->session->set_userdata('permissao', ''); ?>
+<?php $this->session->set_userdata('msg', ''); ?>
 
 </html>

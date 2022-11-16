@@ -44,9 +44,11 @@ $route['dashboard/consultar/vendas'] = 'dashboard/LoadConsultarVendas';
 
 // Inserir fornecedor
 $route['dashboard/fornecedor/inserir'] = 'dashboard/LoadInserirFornecedor';
+
 // Consultar fornecedor
 $route['dashboard/fornecedor/consultar'] = 'dashboard/LoadConsultarFornecedor';
 $route['dashboard/processing/fornecedores'] = 'dashboard/dataTableFornecedores';
+
 // Editar fornecedor
 $route['dashboard/fornecedor/editar/(:num)'] = 'dashboard/LoadEditarFornecedor/$1';
 

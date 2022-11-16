@@ -14,6 +14,113 @@ class Dashboard extends CI_Controller
 		$this->load->model('dashboard_model');
 	}
 
+	public function validaCargo($rota)
+	{
+
+		$cargo = (int)$this->session->userdata('cargo');
+		switch ($rota) {
+			case 'relatorio':
+				if ($cargo > 1) {
+					$this->session->set_userdata('permissao', 'erro');
+					$this->session->set_userdata('msg', 'Você não tem permissão para acessar relatórios');
+					redirect('dashboard');
+				}
+				break;
+
+			case 'padaria':
+				if ($cargo > 2 && $cargo != 6) {
+					$this->session->set_userdata('permissao', 'erro');
+					$this->session->set_userdata('msg', 'Você não tem permissão para acessar padaria');
+					redirect('dashboard');
+				}
+				break;
+
+			case 'inserir-produto':
+				if ($cargo > 4) {
+					$this->session->set_userdata('permissao', 'erro');
+					$this->session->set_userdata('msg', 'Você não tem permissão para adicionar produtos!');
+					redirect('dashboard');
+				}
+				break;
+
+			case 'editar-produto-padaria':
+				if ($cargo > 3 && $cargo != 6) {
+					$this->session->set_userdata('permissao', 'erro');
+					$this->session->set_userdata('msg', 'Você não tem permissão para editar este produto!');
+					redirect('dashboard/consultar/produtos');
+				}
+				break;
+
+				case 'editar-produto':
+					if ($cargo > 3) {
+						$this->session->set_userdata('permissao', 'erro');
+						$this->session->set_userdata('msg', 'Você não tem permissão para editar este produto!');
+						redirect('dashboard/consultar/produtos');
+					}
+					break;
+
+			case 'excluir-produto':
+				if ($cargo > 2) {
+					$this->session->set_userdata('permissao', 'erro');
+					$this->session->set_userdata('msg', 'Você não tem permissão para excluir produtos!');
+					redirect('dashboard/consultar/produtos');
+				}
+				break;
+
+			case 'venda-produto':
+				if ($cargo > 2 && ($cargo != 4 || $cargo != 5)) {
+					$this->session->set_userdata('permissao', 'erro');
+					$this->session->set_userdata('msg', 'Você não tem permissão para vender produtos!');
+					redirect('dashboard/consultar/produtos');
+				}
+				break;
+
+			case 'inserir-fornecedor':
+				if ($cargo > 3) {
+					$this->session->set_userdata('permissao', 'erro');
+					$this->session->set_userdata('msg', 'Você não tem permissão para adicionar fornecedor!');
+					redirect('dashboard');
+				}
+				break;
+
+			case 'consultar-fornecedor':
+				if ($cargo > 4) {
+					$this->session->set_userdata('permissao', 'erro');
+					$this->session->set_userdata('msg', 'Você não tem permissão para consultar fornecedores!');
+					redirect('dashboard');
+				}
+				break;
+
+			case 'editar-fornecedor':
+				if ($cargo > 3) {
+					$this->session->set_userdata('permissao', 'erro');
+					$this->session->set_userdata('msg', 'Você não tem permissão para editar fornecedores!');
+					redirect('dashboard');
+				}
+				break;
+
+				case 'relatorio-vendas':
+					if ($cargo > 1) {
+						$this->session->set_userdata('permissao', 'erro');
+						$this->session->set_userdata('msg', 'Você não tem permissão para consultar o relatório de vendas');
+						redirect('dashboard');
+					}
+					break;
+
+					case 'relatorio-produtos':
+						if ($cargo > 1) {
+							$this->session->set_userdata('permissao', 'erro');
+							$this->session->set_userdata('msg', 'Você não tem permissão para consultar o relatório de produtos');
+							redirect('dashboard');
+						}
+						break;
+
+			default:
+				# code...
+				break;
+		}
+	}
+
 	public function home()
 	{
 
@@ -28,7 +135,7 @@ class Dashboard extends CI_Controller
 
 	public function LoadInserir()
 	{
-
+		$this->validaCargo('inserir-produto');
 		if ($this->session->userdata('login') == 'ok') {
 
 			$dados['titulo'] = 'Inserir produto';
@@ -86,6 +193,7 @@ class Dashboard extends CI_Controller
 
 	public function LoadRelatorio()
 	{
+		$this->validaCargo('relatorio');
 		if ($this->session->userdata('login') == 'ok') {
 
 			$dados['titulo'] = 'Relatório';
@@ -143,16 +251,19 @@ class Dashboard extends CI_Controller
 
 	public function LoadEditar($id)
 	{
+		
 		if ($this->session->userdata('login') == 'ok') {
 
 			$dados['produto'] = $this->dashboard_model->getProdutoById($id);
 			$this->session->set_userdata('id_prod', $id);
 
 			if ($dados['produto']->fk_prod_tipo == 15) {
+				$this->validaCargo('editar-produto-padaria');
 				$dados['titulo'] = 'Editar item padaria';
 
 				$this->load->view('crud-padaria/editar', $dados);
 			} else {
+				$this->validaCargo('editar-produto');
 				$dados['titulo'] = 'Editar produto';
 				$dados['fornecedores'] = $this->dashboard_model->getAllFornecedores();
 				$dados['tiposProdutos'] = $this->dashboard_model->getAllTipoProdutos();
@@ -247,6 +358,7 @@ class Dashboard extends CI_Controller
 
 	public function excluirProduto($id)
 	{
+		$this->validaCargo('excluir-produto');
 		$this->dashboard_model->excluiProduto((int)$id);
 		$this->session->set_userdata('excluir', 'ok');
 
@@ -255,6 +367,7 @@ class Dashboard extends CI_Controller
 
 	public function LoadVendaProduto($id_produto)
 	{
+		$this->validaCargo('venda-produto');
 		if ($this->session->userdata('login') == 'ok') {
 
 			$dados['titulo'] = 'Venda produto';
@@ -295,7 +408,8 @@ class Dashboard extends CI_Controller
 	}
 
 	public function LoadConsultarVendas()
-	{
+	{	
+		$this->validaCargo('relatorio-vendas');
 		if ($this->session->userdata('login') == 'ok') {
 
 			$dados['titulo'] = 'Consultar vendas';
@@ -319,7 +433,7 @@ class Dashboard extends CI_Controller
 				'formatter' => function ($d) {
 					return strtoupper(retiraCaracteresEspeciais($d));
 				}
-			),			
+			),
 			array('db' => 'quantidade',     'dt' => 1),
 			array(
 				'db'        => 'valor_unitario',
@@ -330,16 +444,16 @@ class Dashboard extends CI_Controller
 			),
 			array('db' => 'nome_funcionario',     'dt' => 3),
 			array(
-				'db' => 'data_compra', 
-			    'dt' => 4,
+				'db' => 'data_compra',
+				'dt' => 4,
 				'formatter' => function ($d) {
 					$datahora = explode(' ', $d);
 					$data = explode('-', $datahora[0]);
 					$hora = explode(':', $datahora[1]);
-					return $data[2].'/'.$data[1].'/'.$data[0].' - '.$hora[0].':'.$hora[1];
+					return $data[2] . '/' . $data[1] . '/' . $data[0] . ' - ' . $hora[0] . ':' . $hora[1];
 				}
 			)
-			
+
 		);
 
 		$sql_details = array(
@@ -358,6 +472,7 @@ class Dashboard extends CI_Controller
 
 	public function LoadRelatorioProdutos()
 	{
+		$this->validaCargo('relatorio-produtos');
 		if ($this->session->userdata('login') == 'ok') {
 
 			$dados['titulo'] = 'Relatório geral de produtos';
@@ -397,7 +512,7 @@ class Dashboard extends CI_Controller
 			array('db' => 'data_compra',     'dt' => 7),
 			array('db' => 'qtd_min',     'dt' => 8),
 			array('db' => 'qtd_max',     'dt' => 9)
-			
+
 		);
 
 		$sql_details = array(
@@ -416,6 +531,7 @@ class Dashboard extends CI_Controller
 
 	public function LoadInserirPadaria()
 	{
+		$this->validaCargo('padaria');
 		if ($this->session->userdata('login') == 'ok') {
 
 			$dados['titulo'] = 'Inserir item de padaria';
@@ -477,6 +593,7 @@ class Dashboard extends CI_Controller
 
 	public function LoadInserirFornecedor()
 	{
+		$this->validaCargo('inserir-fornecedor');
 		if ($this->session->userdata('login') == 'ok') {
 
 			$dados['titulo'] = 'Inserir fornecedor';
@@ -511,6 +628,7 @@ class Dashboard extends CI_Controller
 
 	public function LoadConsultarFornecedor()
 	{
+		$this->validaCargo('consultar-fornecedor');
 		if ($this->session->userdata('login') == 'ok') {
 
 			$dados['titulo'] = 'Consultar fornecedores';
@@ -563,6 +681,7 @@ class Dashboard extends CI_Controller
 
 	public function LoadEditarFornecedor($id_fornecedor)
 	{
+		$this->validaCargo('editar-fornecedor');
 		if ($this->session->userdata('login') == 'ok') {
 
 			$dados['titulo'] = 'Editar fornecedor';

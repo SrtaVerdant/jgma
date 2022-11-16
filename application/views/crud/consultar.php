@@ -112,7 +112,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
     }
 </script>
 
+<script>
+	var permissao = JSON.parse('<?= json_encode($this->session->userdata('permissao')); ?>');
+	var msg =  JSON.parse('<?= json_encode($this->session->userdata('msg')); ?>');
+	if (permissao == 'erro') {
+		ativaToast(msg, 5000, 'bg-danger');
+	}
+
+</script>
+
 <?php $this->session->set_userdata('editar', ''); ?>
 <?php $this->session->set_userdata('excluir', ''); ?>
+<?php $this->session->set_userdata('permissao', ''); ?>
+<?php $this->session->set_userdata('msg', ''); ?>
 
 </html>
