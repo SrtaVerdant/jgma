@@ -90,7 +90,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <button type="submit" class="btn btn-primary width-btn">Editar</button>
                     <?php echo form_close(); ?>
 
-                    <a href="<?= base_url('dashboard'); ?>" class="text-voltar btn btn-secondary btn-voltar width-btn"><span class="">Voltar</span></a>
+                    <a href="<?= base_url('dashboard/consultar/produtos'); ?>" class="text-voltar btn btn-secondary btn-voltar width-btn"><span class="">Voltar</span></a>
                 </div>
             </div>
 

@@ -38,11 +38,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
             <div class="row">
                 <div class="container botoesbottom conteudo">
-
                     <button type="submit" id="inserir" class="btn btn-primary width-btn">Inserir</button>
                     <?php echo form_close(); ?>
 
-                    <a href="<?= base_url('dashboard'); ?>" class="text-voltar btn btn-secondary btn-voltar width-btn"><span class="">Voltar</span></a>
+                    <a href=javascript:history.go(-1) class="text-voltar btn btn-secondary btn-voltar width-btn"><span class="">Voltar</span></a>
                 </div>
             </div>
 
