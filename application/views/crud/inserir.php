@@ -53,7 +53,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <select class="form-control js-example-placeholder-single js-states select2" name="tipo">
                         <option disabled value="-" selected>-</option>
                         <?php foreach ($tiposProdutos as $tipo) { ?>
-                            <option value="<?php print_r($tipo->id_prod_tipo_pk); ?>"><?php print_r(strtoupper($tipo->desc_tipo)); ?></option>
+                            <option value="<?php print_r($tipo->id_prod_tipo_pk); ?>"><?php print_r($tipo->desc_tipo); ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -67,6 +67,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col-md-6">
                     <label for="preco" class="font-weight-normal">Valor unitário:</label>
                     <input type="tel" name="preco" class="form-control valor" onkeyup="formatarMoeda(this)" onkeypress="return somenteNumeros(event)" maxlength="14" value="R$ 0,00">
+                </div>
+                <div class="col-md-6">
+                    <label for="qtdmin" class="font-weight-normal">Quantidade mínima:</label>
+                    <input type="tel" name="qtdmin" required class="form-control" maxlength="5" onkeypress="return somenteNumeros(event)">
+                </div>
+            </div>
+
+            <div class="row espacoentre-inputs">                
+                <div class="col-md-6">
+                    <label for="qtdmax" class="font-weight-normal">Quantidade máxima:</label>
+                    <input type="tel" name="qtdmax" required class="form-control" maxlength="5" onkeypress="return somenteNumeros(event)">
                 </div>
             </div>
 

@@ -53,10 +53,12 @@ class Dashboard extends CI_Controller
 			'fk_tipo' => (int)$this->input->post('tipo'),
 			'data_validade' => $this->input->post('validade'),
 			'data_compra' => $this->input->post('datacompra'),
-			'preco_unitario' => formataMoedaDecimal($this->input->post('preco'))
+			'preco_unitario' => formataMoedaDecimal($this->input->post('preco')),
+			'qtdmin' => (int)$this->input->post('qtdmin'),
+			'qtdmax' => (int)$this->input->post('qtdmax')
 		);
 
-		if ($produto['fk_fornecedor'] == '-' || $produto['preco_unitario'] == 0.00 || empty(trim($produto['qtd']))) {
+		if ($produto['fk_fornecedor'] == '-' || $produto['preco_unitario'] == 0.00 || empty(trim($produto['qtd'])) || empty(trim($produto['qtdmin'])) || empty(trim($produto['qtdmax']))) {
 			$this->session->set_userdata('inserir', 'erro');
 		} else {
 			$this->dashboard_model->cadastraProduto($produto);
@@ -174,10 +176,12 @@ class Dashboard extends CI_Controller
 			'fk_tipo' => (int)$this->input->post('tipo'),
 			'data_validade' => $this->input->post('validade'),
 			'data_compra' => $this->input->post('datacompra'),
-			'preco_unitario' => formataMoedaDecimal($this->input->post('preco'))
+			'preco_unitario' => formataMoedaDecimal($this->input->post('preco')),
+			'qtdmin' => (int)$this->input->post('qtdmin'),
+			'qtdmax' => (int)$this->input->post('qtdmax')
 		);
 
-		if ($produto['fk_fornecedor'] == '-' || $produto['preco_unitario'] == 0.00 || empty(trim($produto['qtd']))) {
+		if ($produto['fk_fornecedor'] == '-' || $produto['preco_unitario'] == 0.00 || empty(trim($produto['qtd'])) || empty(trim($produto['qtdmin'])) || empty(trim($produto['qtdmax']))) {
 			$this->session->set_userdata('editar', 'erro');
 		} else {
 			$this->dashboard_model->editaProduto($produto);
@@ -292,7 +296,122 @@ class Dashboard extends CI_Controller
 
 	public function LoadConsultarVendas()
 	{
-		echo 'em construção';
+		if ($this->session->userdata('login') == 'ok') {
+
+			$dados['titulo'] = 'Consultar vendas';
+
+			$this->load->view('relatorio/vendas', $dados);
+		} else {
+			redirect('');
+		}
+	}
+
+	public function dataTableVendas()
+	{
+		$table = 'vw_vendas';
+
+		$primaryKey = 'id_venda';
+
+		$columns = array(
+			array(
+				'db' => 'nome',
+				'dt' => 0,
+				'formatter' => function ($d) {
+					return strtoupper(retiraCaracteresEspeciais($d));
+				}
+			),			
+			array('db' => 'quantidade',     'dt' => 1),
+			array(
+				'db'        => 'valor_unitario',
+				'dt'        => 2,
+				'formatter' => function ($d) {
+					return 'R$ ' . number_format($d, 2, ",", ".");
+				}
+			),
+			array('db' => 'nome_funcionario',     'dt' => 3),
+			array(
+				'db' => 'data_compra', 
+			    'dt' => 4,
+				'formatter' => function ($d) {
+					$datahora = explode(' ', $d);
+					$data = explode('-', $datahora[0]);
+					$hora = explode(':', $datahora[1]);
+					return $data[2].'/'.$data[1].'/'.$data[0].' - '.$hora[0].':'.$hora[1];
+				}
+			)
+			
+		);
+
+		$sql_details = array(
+			'user' => 'nexuco44_adminjgma',
+			'pass' => 'jgma!7070',
+			'db'   => 'nexuco44_grupo-jgma',
+			'host' => '108.179.193.193'
+		);
+
+		require('./application/libraries/ssp.class.php');
+
+		echo json_encode(
+			SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
+		);
+	}
+
+	public function LoadRelatorioProdutos()
+	{
+		if ($this->session->userdata('login') == 'ok') {
+
+			$dados['titulo'] = 'Relatório geral de produtos';
+
+			$this->load->view('relatorio/produtos', $dados);
+		} else {
+			redirect('');
+		}
+	}
+
+	public function dataTableRelatorioProdutos()
+	{
+		$table = 'vw_produtos';
+
+		$primaryKey = 'id_prod_pk';
+
+		$columns = array(
+			array('db' => 'id_prod_pk', 'dt' => 0),
+			array(
+				'db' => 'nome',
+				'dt' => 1,
+				'formatter' => function ($d) {
+					return strtoupper(retiraCaracteresEspeciais($d));
+				}
+			),
+			array('db' => 'nome_forne',  'dt' => 2),
+			array(
+				'db'        => 'valor_unitario',
+				'dt'        => 3,
+				'formatter' => function ($d, $row) {
+					return 'R$ ' . number_format($d, 2, ",", ".");
+				}
+			),
+			array('db' => 'desc_tipo',     'dt' => 4),
+			array('db' => 'quantidade',     'dt' => 5),
+			array('db' => 'prazo_validade',     'dt' => 6),
+			array('db' => 'data_compra',     'dt' => 7),
+			array('db' => 'qtd_min',     'dt' => 8),
+			array('db' => 'qtd_max',     'dt' => 9)
+			
+		);
+
+		$sql_details = array(
+			'user' => 'nexuco44_adminjgma',
+			'pass' => 'jgma!7070',
+			'db'   => 'nexuco44_grupo-jgma',
+			'host' => '108.179.193.193'
+		);
+
+		require('./application/libraries/ssp.class.php');
+
+		echo json_encode(
+			SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
+		);
 	}
 
 	public function LoadInserirPadaria()

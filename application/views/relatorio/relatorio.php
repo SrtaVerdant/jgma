@@ -106,7 +106,7 @@ if ($padaria) {
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 centro-relatorio">
-                                        <a href="<?= base_url('dashboard/consultar/produtos') ?>"><button class="btn btn-primary" style="width: 100%; padding: 0 6rem;">Consultar Produtos</button></a>
+                                        <a href="<?= base_url('dashboard/relatorio/produtos') ?>"><button class="btn btn-primary" style="width: 100%; padding: 0 6rem;">Consultar Produtos</button></a>
                                     </div>
                                 </div>
                             </div>

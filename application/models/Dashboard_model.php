@@ -12,6 +12,7 @@ class Dashboard_model extends CI_Model
   public function getAllFornecedores()
   {
     $this->db->select('*');
+    $this->db->where('id_forne_pk !=', 48);
     $query = $this->db->get('fornecedores')->result();
 
     return $query;
@@ -27,6 +28,8 @@ class Dashboard_model extends CI_Model
     $this->db->set('quantidade', $produto['qtd']);
     $this->db->set('prazo_validade', $produto['data_validade']);
     $this->db->set('data_compra', $produto['data_compra']);
+    $this->db->set('qtd_min', $produto['qtdmin']);
+    $this->db->set('qtd_max', $produto['qtdmax']);
     $this->db->insert('produtos');
   }
 
@@ -49,6 +52,8 @@ class Dashboard_model extends CI_Model
     $this->db->set('fk_prod_tipo', $produto['fk_tipo']);
     $this->db->set('prazo_validade', $produto['data_validade']);
     $this->db->set('data_compra', $produto['data_compra']);
+    $this->db->set('qtd_min', $produto['qtdmin']);
+    $this->db->set('qtd_max', $produto['qtdmax']);
     $this->db->where('id_prod_pk', $produto['id']);
     $this->db->update('produtos');
   }

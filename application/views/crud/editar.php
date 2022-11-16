@@ -71,6 +71,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <label for="preco" class="font-weight-normal">Valor unitário:</label>
                     <input type="tel" name="preco" class="form-control valor" onkeyup="formatarMoeda(this)" onkeypress="return somenteNumeros(event)" maxlength="14" value="<?= 'R$ ' . number_format($produto->valor_unitario, 2, ",", "."); ?>">
                 </div>
+                <div class="col-md-6">
+                    <label for="qtdmin" class="font-weight-normal">Quantidade mínima:</label>
+                    <input type="tel" name="qtdmin" required class="form-control" maxlength="5" onkeypress="return somenteNumeros(event)" value="<?= $produto->qtd_min; ?>">
+                </div>
+            </div>
+
+            <div class="row espacoentre-inputs">                
+                <div class="col-md-6">
+                    <label for="qtdmax" class="font-weight-normal">Quantidade máxima:</label>
+                    <input type="tel" name="qtdmax" required class="form-control" maxlength="5" onkeypress="return somenteNumeros(event)" value="<?= $produto->qtd_max; ?>">
+                </div>
             </div>
 
             <div class="row">
